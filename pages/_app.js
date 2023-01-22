@@ -1,11 +1,11 @@
-import { ThemeProvider } from "../context/theme.context";
+import { GameProvider } from "@/context/game.context";
 import "../styles/globals.css";
 
 function MyApp({ Component, pageProps }) {
   return (
-    <ThemeProvider>
+    <GameProvider>
       <Component {...pageProps} />
-    </ThemeProvider>
+    </GameProvider>
   );
 }
 
