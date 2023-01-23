@@ -33,11 +33,11 @@ export default function ThemeBtn() {
     <div>
       {theme === "dark" ? (
         <button type="button" onClick={lightThemeHandler}>
-          <Icons name="light" className={"w-6 h-6 stroke-2"} />
+          <Icons name="light" className={"w-5 h-5"} />
         </button>
       ) : (
         <button type="button" onClick={darkThemeHandler}>
-          <Icons name="dark" className={"w-6 h-6 stroke-2"} />
+          <Icons name="dark" className={"w-5 h-5"} />
         </button>
       )}
     </div>
