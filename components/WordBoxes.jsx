@@ -1,9 +1,53 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect } from "react";
 import { useGame } from "@/context/game.context";
 
 export function WordBoxes() {
-  const { wordList } = useGame();
+  const { wordList, onRemoveClick, onLetterClick, onEnterClick } = useGame();
   const classNames = (...className) => className.filter(Boolean).join(" ");
+
+  const onKeyPressFunction = useCallback(
+    (event) => {
+      const keyCode = event.keyCode;
+      if ((keyCode > 64 && keyCode < 91) || keyCode === 8 || keyCode === 13) {
+        const key = event.key.toUpperCase();
+        const currentRow = wordList.findIndex((item) => item.guessed === false);
+
+        if (currentRow == -1) {
+          return;
+        }
+
+        const currentBox = wordList[currentRow].children.findIndex(
+          (item) => item.value === ""
+        );
+
+        if (keyCode !== 13) {
+          if (currentBox !== -1) {
+            if (keyCode === 8) {
+              if (currentBox !== 0) {
+                onRemoveClick();
+              }
+            } else {
+              onLetterClick(key);
+            }
+          } else {
+            if (keyCode === 8) {
+              onRemoveClick();
+            }
+          }
+        } else {
+          onEnterClick();
+        }
+      }
+    },
+    [onEnterClick, onLetterClick, onRemoveClick, wordList]
+  );
+
+  useEffect(() => {
+    document.addEventListener("keydown", onKeyPressFunction, false);
+
+    return () =>
+      document.removeEventListener("keydown", onKeyPressFunction, false);
+  }, [onKeyPressFunction]);
 
   return (
     <div className="mx-auto w-fit flex flex-col gap-1 my-4">
@@ -18,7 +62,7 @@ export function WordBoxes() {
                 child.status === "correct" && "bg-green-500 text-white",
                 child.status === "guessing" &&
                   "bg-transparent border-2 border-gray-300",
-                "dark:text-white w-14 h-14 flex items-center justify-center  rounded-sm text-2xl font-bold"
+                "dark:text-white sm:w-14 sm:h-14 w-12 h-12 flex items-center justify-center  rounded-sm text-2xl font-bold"
               )}
             >
               {child.value}

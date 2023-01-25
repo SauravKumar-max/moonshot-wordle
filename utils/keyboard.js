@@ -11,8 +11,8 @@ export function getKeys() {
   return alphabets;
 }
 
-export function keyStatus(list, alphabet) {
+export function getKeyStatus(list, alphabet) {
   const keyIndex = list.findIndex((item) => item.value === alphabet);
-  const letterStatus = list[keyIndex].status;
-  return { keyIndex, letterStatus };
+  const keyStatus = list[keyIndex].status;
+  return { keyIndex, keyStatus };
 }

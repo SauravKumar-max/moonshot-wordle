@@ -9,3 +9,13 @@ export function getCurrentBox(list, currentRow) {
 export function guessedWord(list, currentRow) {
   return list[currentRow].children.map((item) => item.value).join("");
 }
+
+export function getRandomWord(data) {
+  const randomIndex = Math.floor(Math.random() * data.length);
+  return data[randomIndex] ? data[randomIndex] : getRandomWord(data);
+}
+
+export function getOccurrences(word, letter) {
+  console.log({ word, letter });
+  return (word.toUpperCase().match(new RegExp(letter, "g")) || []).length;
+}
