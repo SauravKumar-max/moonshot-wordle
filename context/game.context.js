@@ -1,16 +1,26 @@
-import { getCurrentBox, getCurrentRow, guessedWord } from "@/utils/game";
-import { getGuessList } from "@/utils/guessList";
-import { getKeys, keyStatus } from "@/utils/keyboard";
 import { createContext, useCallback, useContext, useState } from "react";
+import { getGuessList } from "@/utils/guessList";
+import { getKeys, getKeyStatus } from "@/utils/keyboard";
+import { data } from "@/utils/data";
+import { toast } from "react-toastify";
+import {
+  getCurrentBox,
+  getCurrentRow,
+  getOccurrences,
+  getRandomWord,
+  guessedWord,
+} from "@/utils/game";
 
 const GameContext = createContext(null);
 
 export function GameProvider({ children }) {
-  const word = "GUEST";
   const guessList = getGuessList(6);
   const keysList = getKeys();
+  const randomWord = getRandomWord(data);
+  const [word, setWord] = useState(randomWord);
   const [wordList, setWordList] = useState(guessList);
   const [keys, setKeys] = useState(keysList);
+  const [result, setResult] = useState({ won: false, show: false });
 
   const onLetterClick = useCallback(
     (letter) => {
@@ -23,7 +33,7 @@ export function GameProvider({ children }) {
       list[currentRow].children[currentBox].value = letter;
       setWordList(list);
     },
-    [wordList]
+    [setWordList, wordList]
   );
 
   const onRemoveClick = useCallback(() => {
@@ -41,29 +51,43 @@ export function GameProvider({ children }) {
     }
 
     setWordList(list);
-  }, [wordList]);
+  }, [setWordList, wordList]);
 
   const onEnterClick = useCallback(() => {
     const currentRow = getCurrentRow(wordList);
     const currentBox = getCurrentBox(wordList, currentRow);
     const list = [...wordList];
     const alphabets = [...keys];
+    const userWord = guessedWord(list, currentRow);
+
     if (currentBox === -1) {
       list[currentRow].guessed = true;
       list[currentRow].children = list[currentRow].children.map(
         (item, index) => {
-          const isPresent = word.toUpperCase().indexOf(item.value);
-          const { keyIndex, letterStatus } = keyStatus(keys, item.value);
-          if (isPresent === -1) {
-            alphabets[keyIndex].status = "absent";
-            return { ...item, status: "absent" };
-          }
-          if (isPresent === index) {
+          const wordIndex = word.toUpperCase().indexOf(item.value);
+          const { keyIndex, keyStatus } = getKeyStatus(keys, item.value);
+
+          // GREEN
+          if (word[index].toUpperCase() === item.value.toUpperCase()) {
             alphabets[keyIndex].status = "correct";
             return { ...item, status: "correct" };
           }
-          if (isPresent !== index) {
-            if (letterStatus !== "correct") {
+
+          const subStrWord = userWord.substring(index, 5);
+          const occurrenceInUser = getOccurrences(subStrWord, item.value);
+          const occurrenceInWord = getOccurrences(word, item.value);
+
+          // GRAY
+          if (wordIndex === -1 || occurrenceInUser > occurrenceInWord) {
+            if (keyStatus === "guessing") {
+              alphabets[keyIndex].status = "absent";
+            }
+            return { ...item, status: "absent" };
+          }
+
+          // YELLOW
+          if (wordIndex !== index) {
+            if (keyStatus !== "correct") {
               alphabets[keyIndex].status = "present";
             }
             return { ...item, status: "present" };
@@ -72,21 +96,64 @@ export function GameProvider({ children }) {
         }
       );
 
-      const userWord = guessedWord(list, currentRow);
       if (userWord.toUpperCase() === word.toUpperCase()) {
-        console.log("WINNER");
+        toast.success("You Won", {
+          position: "top-right",
+          autoClose: 1500,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+        });
+
+        setTimeout(() => setResult({ won: true, show: true }), 2000);
       }
     } else {
-      console.log("NOT SO EARLY");
+      toast.error("Please fill a 5 letter word", {
+        position: "top-right",
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
     }
+
+    if (
+      currentRow === wordList.length - 1 &&
+      userWord.toUpperCase() !== word.toUpperCase()
+    ) {
+      toast.error("You Lost", {
+        position: "top-right",
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
+
+      setTimeout(() => setResult({ won: false, show: true }), 2000);
+    }
+
     setKeys(alphabets);
     setWordList(list);
-  }, [keys, wordList]);
+  }, [keys, setKeys, setWordList, word, wordList]);
 
   return (
     <GameContext.Provider
       value={{
+        word,
+        setWord,
+        result,
+        setResult,
         keys,
+        setKeys,
         wordList,
         setWordList,
         onLetterClick,
