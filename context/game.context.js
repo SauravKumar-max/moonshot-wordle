@@ -20,6 +20,7 @@ export function GameProvider({ children }) {
   const [word, setWord] = useState(randomWord);
   const [wordList, setWordList] = useState(guessList);
   const [keys, setKeys] = useState(keysList);
+  const [showRules, setShowRules] = useState(true);
   const [result, setResult] = useState({ won: false, show: false });
 
   const onLetterClick = useCallback(
@@ -108,10 +109,10 @@ export function GameProvider({ children }) {
           theme: "dark",
         });
 
-        setTimeout(() => setResult({ won: true, show: true }), 2000);
+        setTimeout(() => setResult({ won: true, show: true }), 1000);
       }
     } else {
-      toast.error("Please fill a 5 letter word", {
+      return toast.error("Please fill a 5 letter word", {
         position: "top-right",
         autoClose: 1500,
         hideProgressBar: false,
@@ -138,12 +139,22 @@ export function GameProvider({ children }) {
         theme: "dark",
       });
 
-      setTimeout(() => setResult({ won: false, show: true }), 2000);
+      setTimeout(() => setResult({ won: false, show: true }), 1000);
     }
 
     setKeys(alphabets);
     setWordList(list);
   }, [keys, setKeys, setWordList, word, wordList]);
+
+  function restartGame() {
+    const guessList = getGuessList(6);
+    const keysList = getKeys();
+    const randomWord = getRandomWord(data);
+    setWord(randomWord);
+    setWordList(guessList);
+    setKeys(keysList);
+    setResult({ won: false, show: false });
+  }
 
   return (
     <GameContext.Provider
@@ -156,9 +167,12 @@ export function GameProvider({ children }) {
         setKeys,
         wordList,
         setWordList,
+        showRules,
+        setShowRules,
         onLetterClick,
         onRemoveClick,
         onEnterClick,
+        restartGame,
       }}
     >
       {children}

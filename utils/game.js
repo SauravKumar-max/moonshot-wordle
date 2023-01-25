@@ -16,6 +16,5 @@ export function getRandomWord(data) {
 }
 
 export function getOccurrences(word, letter) {
-  console.log({ word, letter });
   return (word.toUpperCase().match(new RegExp(letter, "g")) || []).length;
 }

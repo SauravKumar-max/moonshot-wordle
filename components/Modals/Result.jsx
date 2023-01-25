@@ -1,25 +1,11 @@
 import React from "react";
 import { useGame } from "@/context/game.context";
-import { getRandomWord } from "@/utils/game";
-import { getGuessList } from "@/utils/guessList";
-import { getKeys } from "@/utils/keyboard";
 import { Icons } from "../Icons";
-import { data } from "@/utils/data";
 
 export function Result() {
-  const { word, result, setResult, setWord, setKeys, setWordList } = useGame();
+  const { word, result, setResult, restartGame } = useGame();
 
   function closeResultModal() {
-    setResult({ won: false, show: false });
-  }
-
-  function restartGame() {
-    const guessList = getGuessList(6);
-    const keysList = getKeys();
-    const randomWord = getRandomWord(data);
-    setWord(randomWord);
-    setWordList(guessList);
-    setKeys(keysList);
     setResult({ won: false, show: false });
   }
 
@@ -32,7 +18,7 @@ export function Result() {
       <div className="overflow-auto w-[95%] max-w-lg h-auto max-h-[90%] fixed z-20 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white px-4 py-2 rounded">
         <div className="flex items-center justify-between">
           <span></span>
-          <h3 className="text-center font-bold text-lg">
+          <h3 className="text-center font-bold text-lg ml-4">
             {result.won ? "You Won" : "You Lost"}
           </h3>
           <button type="button" onClick={closeResultModal} className="text-end">
@@ -49,7 +35,7 @@ export function Result() {
             className="w-fit mx-auto mb-4 mt-2 rounded-md border border-transparent bg-indigo-600 px-8 py-2 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none"
             onClick={restartGame}
           >
-            Restart
+            {result.won ? "Play Game" : "Restart"}
           </button>
         </div>
       </div>

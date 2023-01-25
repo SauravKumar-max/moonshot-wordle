@@ -26,6 +26,7 @@ export function KeyBoard() {
                   "sm:w-10 sm:h-12 w-6 h-8 sm:text-sm text-xs font-semibold rounded-sm"
                 )}
                 onClick={() => onLetterClick(letter)}
+                onFocus={(e) => e.target.blur()}
               >
                 {letter}
               </button>
@@ -48,6 +49,7 @@ export function KeyBoard() {
                   "sm:w-10 sm:h-12 w-6 h-8 sm:text-sm text-xs font-semibold rounded-sm"
                 )}
                 onClick={() => onLetterClick(letter)}
+                onFocus={(e) => e.target.blur()}
               >
                 {letter}
               </button>
@@ -59,6 +61,7 @@ export function KeyBoard() {
             type="button"
             className="sm:w-16 sm:h-12 w-12 h-8 sm:text-sm text-xs font-semibold hover:bg-gray-400 dark:hover:bg-gray-300 bg-gray-300 dark:bg-gray-400 rounded-sm"
             onClick={onEnterClick}
+            onFocus={(e) => e.target.blur()}
           >
             Enter
           </button>
@@ -78,6 +81,7 @@ export function KeyBoard() {
                     "sm:w-10 sm:h-12 w-6 h-8 sm:text-sm text-xs font-semibold rounded-sm"
                   )}
                   onClick={() => onLetterClick(letter)}
+                  onFocus={(e) => e.target.blur()}
                 >
                   {letter}
                 </button>
@@ -88,6 +92,7 @@ export function KeyBoard() {
             type="button"
             className="sm:w-16 sm:h-12 w-8 h-8 sm:text-sm text-xs hover:bg-gray-400 dark:hover:bg-gray-300 bg-gray-300 dark:bg-gray-400 rounded-sm flex items-center justify-center"
             onClick={onRemoveClick}
+            onFocus={(e) => e.target.blur()}
           >
             <Icons
               name="backspace"

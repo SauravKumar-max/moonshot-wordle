@@ -1,9 +1,18 @@
 import React, { useCallback, useEffect } from "react";
 import { useGame } from "@/context/game.context";
+import { Result } from "./Modals/Result";
 
 export function WordBoxes() {
-  const { wordList, onRemoveClick, onLetterClick, onEnterClick } = useGame();
   const classNames = (...className) => className.filter(Boolean).join(" ");
+  const {
+    showRules,
+    result,
+    wordList,
+    onRemoveClick,
+    onLetterClick,
+    onEnterClick,
+    restartGame,
+  } = useGame();
 
   const onKeyPressFunction = useCallback(
     (event) => {
@@ -43,33 +52,51 @@ export function WordBoxes() {
   );
 
   useEffect(() => {
-    document.addEventListener("keydown", onKeyPressFunction, false);
+    if (result.show || showRules) {
+      document.removeEventListener("keydown", onKeyPressFunction, false);
+    } else {
+      document.addEventListener("keydown", onKeyPressFunction, false);
+    }
 
     return () =>
       document.removeEventListener("keydown", onKeyPressFunction, false);
-  }, [onKeyPressFunction]);
+  }, [onKeyPressFunction, result.show, showRules]);
 
   return (
-    <div className="mx-auto w-fit flex flex-col gap-1 my-4">
-      {wordList.map((item, index) => (
-        <div key={index + "parent"} className="flex gap-1">
-          {item.children.map((child, childIdx) => (
-            <div
-              key={childIdx + index + "child"}
-              className={classNames(
-                child.status === "present" && "bg-yellow-500 text-white",
-                child.status === "absent" && "bg-gray-400 text-white",
-                child.status === "correct" && "bg-green-500 text-white",
-                child.status === "guessing" &&
-                  "bg-transparent border-2 border-gray-300",
-                "dark:text-white sm:w-14 sm:h-14 w-12 h-12 flex items-center justify-center  rounded-sm text-2xl font-bold"
-              )}
-            >
-              {child.value}
-            </div>
-          ))}
-        </div>
-      ))}
-    </div>
+    <>
+      {result.show && <Result />}
+
+      <div className="mx-auto w-fit flex flex-col gap-1 mt-4">
+        {wordList.map((item, index) => (
+          <div key={index + "parent"} className="flex gap-1">
+            {item.children.map((child, childIdx) => (
+              <div
+                key={childIdx + index + "child"}
+                className={classNames(
+                  child.status === "present" && "bg-yellow-500 text-white",
+                  child.status === "absent" && "bg-gray-400 text-white",
+                  child.status === "correct" && "bg-green-500 text-white",
+                  child.status === "guessing" &&
+                    "bg-transparent border-2 border-gray-300",
+                  "dark:text-white sm:w-14 sm:h-14 w-12 h-12 flex items-center justify-center  rounded-sm text-2xl font-bold"
+                )}
+              >
+                {child.value}
+              </div>
+            ))}
+          </div>
+        ))}
+      </div>
+      <div className="mx-auto w-fit mt-2">
+        <button
+          type="button"
+          className="text-gray-700 hover:text-indigo-600 dark:text-gray-400 dark:hover:text-gray-100 hover:underline"
+          onClick={restartGame}
+          onFocus={(e) => e.target.blur()}
+        >
+          Reset
+        </button>
+      </div>
+    </>
   );
 }

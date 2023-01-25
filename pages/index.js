@@ -1,16 +1,14 @@
 import Head from "next/head";
 import { Inter } from "@next/font/google";
 import Navbar from "@/components/Navbar";
-import GamePanel from "@/components/GamePanel";
+import { WordBoxes } from "@/components/WordBoxes";
+import { KeyBoard } from "@/components/KeyBoard";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { Result } from "@/components/Modals/Result";
-import { useGame } from "@/context/game.context";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
-  const { result } = useGame();
   return (
     <>
       <Head>
@@ -18,9 +16,9 @@ export default function Home() {
       </Head>
       <main>
         <Navbar />
-        <GamePanel />
+        <WordBoxes />
+        <KeyBoard />
         <ToastContainer />
-        {result.show && <Result />}
       </main>
     </>
   );
