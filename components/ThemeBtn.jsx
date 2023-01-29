@@ -6,7 +6,7 @@ import {
 import { Icons } from "./Icons";
 
 export default function ThemeBtn() {
-  const [theme, setTheme] = useState("dark");
+  const [theme, setTheme] = useState("light");
 
   useEffect(() => {
     const localStorageTheme = getThemeFromLocalStorage();
@@ -14,8 +14,8 @@ export default function ThemeBtn() {
       setThemeInLocalStorage(localStorageTheme);
       setTheme(localStorageTheme);
     } else {
-      setThemeInLocalStorage("dark");
-      setTheme("dark");
+      setThemeInLocalStorage("light");
+      setTheme("light");
     }
   }, []);
 

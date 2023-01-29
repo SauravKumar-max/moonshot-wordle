@@ -10,12 +10,12 @@ export function Result() {
   }
 
   return (
-    <div className="bg-white">
+    <div>
       <div
         className="fixed inset-0 z-10 w-full h-full bg-gray-400 opacity-50"
         onClick={closeResultModal}
       ></div>
-      <div className="overflow-auto w-[95%] max-w-lg h-auto max-h-[90%] fixed z-20 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white px-4 py-2 rounded">
+      <div className="overflow-auto w-[95%] max-w-lg h-auto max-h-[90%] fixed z-20 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white dark:bg-slate-900 dark:text-white px-4 py-2 rounded">
         <div className="flex items-center justify-between">
           <span></span>
           <h3 className="text-center font-bold text-lg ml-4">
@@ -35,7 +35,7 @@ export function Result() {
             className="w-fit mx-auto mb-4 mt-2 rounded-md border border-transparent bg-indigo-600 px-8 py-2 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none"
             onClick={restartGame}
           >
-            {result.won ? "Play Game" : "Restart"}
+            {result.won ? "Play Again" : "Restart"}
           </button>
         </div>
       </div>
