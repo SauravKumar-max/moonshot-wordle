@@ -19,7 +19,8 @@ export function KeyBoard() {
                 type="button"
                 className={classNames(
                   keyStatus === "present" && "bg-yellow-500 text-white",
-                  keyStatus === "absent" && "bg-gray-400 text-white",
+                  keyStatus === "absent" &&
+                    "bg-gray-400 dark:bg-gray-600 text-white",
                   keyStatus === "correct" && "bg-green-500 text-white",
                   keyStatus === "guessing" &&
                     "hover:bg-gray-400 dark:hover:bg-gray-300 bg-gray-300 dark:bg-gray-400",
@@ -42,7 +43,8 @@ export function KeyBoard() {
                 type="button"
                 className={classNames(
                   keyStatus === "present" && "bg-yellow-500 text-white",
-                  keyStatus === "absent" && "bg-gray-400 text-white",
+                  keyStatus === "absent" &&
+                    "bg-gray-400 dark:bg-gray-600 text-white",
                   keyStatus === "correct" && "bg-green-500 text-white",
                   keyStatus === "guessing" &&
                     "hover:bg-gray-400 dark:hover:bg-gray-300 bg-gray-300 dark:bg-gray-400",
@@ -74,7 +76,8 @@ export function KeyBoard() {
                   type="button"
                   className={classNames(
                     keyStatus === "present" && "bg-yellow-500 text-white",
-                    keyStatus === "absent" && "bg-gray-400 text-white",
+                    keyStatus === "absent" &&
+                      "bg-gray-400 dark:bg-gray-600 text-white",
                     keyStatus === "correct" && "bg-green-500 text-white",
                     keyStatus === "guessing" &&
                       "hover:bg-gray-400 dark:hover:bg-gray-300 bg-gray-300 dark:bg-gray-400",
